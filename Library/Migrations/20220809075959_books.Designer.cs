@@ -9,16 +9,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Library.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220808101832_book")]
-    partial class book
+    [DbContext(typeof(LibraryContext))]
+    [Migration("20220809075959_books")]
+    partial class books
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("ProductVersion", "3.1.25")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Library.Models.Book", b =>
@@ -42,7 +42,7 @@ namespace Library.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Book");
                 });
 #pragma warning restore 612, 618
         }
