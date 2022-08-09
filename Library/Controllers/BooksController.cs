@@ -25,14 +25,15 @@ namespace Library.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBook()
         {
-            return await _context.Book.ToListAsync();
+            return await _context.Book.Include(a => a.Author).ToListAsync();
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
-            var book = await _context.Book.FindAsync(id);
+            var book = await _context.Book.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
+
 
             if (book == null)
             {
@@ -81,6 +82,7 @@ namespace Library.Controllers
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
             _context.Book.Add(book);
+            
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetBook", new { id = book.Id }, book);
