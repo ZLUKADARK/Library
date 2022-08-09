@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Library.Models;
 using Library.Data;
 
+
 namespace Library
 {
     public class Startup
@@ -36,6 +37,8 @@ namespace Library
 
             services.AddDbContext<LibraryContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("LibraryContext")));
+
+           
 
            
         }

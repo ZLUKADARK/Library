@@ -1,18 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Library.Models
 {
-    public class Book
+    public class Author
     {
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public string Genre { get; set; }
-        public DateTime ReleseDate { get; set; }
-
-        public int AuthorId { get; set; }
-        public Author Author { get; set; }
-
     }
 }
