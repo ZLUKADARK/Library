@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Library.Migrations
 {
-    public partial class library_v1 : Migration
+    public partial class RDate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,7 +28,7 @@ namespace Library.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
                     Genre = table.Column<string>(nullable: true),
-                    ReleseDate = table.Column<DateTime>(nullable: false),
+                    ReleseDate = table.Column<DateTime>(type: "Date", nullable: true),
                     AuthorId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
