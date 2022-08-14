@@ -8,9 +8,9 @@ import { Component, ChangeEvent } from "react";
 import ApiBooks from "../store/ApiBooks";
 import IBookData from '../store/ApiBooks';
 import Services from '../Services/BookServices';
-import 'bootstrap/dist/css/bootstrap.css';
 import BookServices from '../Services/BookServices';
 import { METHODS } from 'http';
+import { title } from 'process';
 
 type Props = {};
 
@@ -22,6 +22,9 @@ type State = IBookData & {
 class Home extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
+
+        this.removeBook = this.removeBook.bind(this);
+        this.getAllBooks = this.getAllBooks.bind(this);
     }
 
     i: Number = 0;
@@ -34,7 +37,6 @@ class Home extends Component<Props, State> {
     removeBook = (iId: any) => {
         BookServices.delete(iId)
             .then((response: any) => {
-                console.log(response.data);
                 this.getAllBooks();
             })
             .catch((e: Error) => {
@@ -58,7 +60,7 @@ class Home extends Component<Props, State> {
             <React.Fragment>
                 {
                     this.books.map((item, i) => {
-                        return <ListItem name={item.name} author={item.author} genre={item.genre} releseDate={item.releseDate} id={item.id} key={item.id} onDelete={this.removeBook} />
+                        return <ListItem title={item.title} author={item.author} genre={item.genre} releseDate={item.releseDate} id={item.id} key={item.id} authorId={item.authorId} onDelete={ this.removeBook } />
                     })
                 }
             </React.Fragment>
@@ -68,25 +70,20 @@ class Home extends Component<Props, State> {
 
 interface ListProps {
     item: Object,
-
-
 }
 
 class ListItem extends React.Component<IBookData, State>{
     constructor(props: IBookData) {
-        super(props);
-            
+        super(props);       
     }
 
     
-
-
     public render() {
         return (
             <>
                 <div className="card">
                     <div className="card-header">
-                        {this.props.id} | {this.props.name}
+                        {this.props.id} | {this.props.title}
                     </div>
                     <div className="card-body">
                         <blockquote className="blockquote mb-0">
@@ -94,7 +91,7 @@ class ListItem extends React.Component<IBookData, State>{
                             <p>Relese Date:  {this.props.releseDate}</p>
                             <footer className="blockquote-footer"> <cite title="Source Title"> {this.props.author.lName} {this.props.author.name} {this.props.author.mName}</cite></footer>
                             <br />
-                            <button className="btn btn-primary" onClick={() => this.props.onDelete(this.props.id)}>Delete {this.props.name}</button>
+                            <button className="btn btn-primary" onClick={() => this.props.onDelete(this.props.id)}>Delete {this.props.title}</button>
                         </blockquote>
                     </div>
                 </div>
