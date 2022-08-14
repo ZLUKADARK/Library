@@ -34,7 +34,6 @@ namespace Library.Controllers
         {
             var book = await _context.Book.Include(a => a.Author).SingleOrDefaultAsync(a => a.Id == id);
 
-
             if (book == null)
             {
                 return NotFound();
@@ -81,9 +80,7 @@ namespace Library.Controllers
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
-            
             _context.Book.Add(book);
-            
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetBook", new { id = book.Id }, book);

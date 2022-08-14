@@ -16,12 +16,12 @@ export default interface IBooksData {
     name: string,
     genre: string,
     author: {
-        id: any | null,
-        name: string
-        lname: string
-        mname: string
+        id?: any | null,
+        name: string,
+        lName: string,
+        mName: string
     },
-    releseDate: Date,
+    releseDate: Date
 }
 
 

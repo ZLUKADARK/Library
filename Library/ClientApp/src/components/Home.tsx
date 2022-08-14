@@ -1,23 +1,91 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { error } from 'console';
+import { RouteComponentProps } from 'react-router';
+import { ApplicationState } from '../store';
+import * as Booksstore from '../store/ApiBooks';
+import { Component, ChangeEvent } from "react";
+import ApiBooks from "../store/ApiBooks";
+import IBookData from '../store/ApiBooks';
+import Services from '../Services/BookServices';
+import 'bootstrap/dist/css/bootstrap.css';
 
-const Home = () => (
-  <div>
-    <h1>Hello, world!</h1>
-    <p>Welcome to your new single-page application, built with:</p>
-    <ul>
-      <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-      <li><a href='https://facebook.github.io/react/'>React</a> and <a href='https://redux.js.org/'>Redux</a> for client-side code</li>
-      <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-    </ul>
-    <p>To help you get started, we've also set up:</p>
-    <ul>
-      <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-      <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-      <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-    </ul>
-    <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-  </div>
-);
+type Props = {};
 
-export default connect()(Home);
+type State = IBookData & {
+    correntBook: Array<IBookData> | null,
+};
+
+
+class Home extends Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+    }
+
+    i: Number = 0;
+    books: Array<IBookData> = [];
+
+    componentDidMount() {
+        this.getAllBooks();
+        
+    }
+
+    getAllBooks() {
+        Services.getAll()
+            .then((response: any) => {
+                this.setState(this.books = response.data)
+                console.log(this.books[0].author.lName);
+            })
+            .catch((e: Error) => {
+                console.log(e);
+
+            });
+    }
+
+    public render() {
+        return (
+            <React.Fragment>
+                {
+                    this.books.map((item, i) => {
+                        return <ListItem name={item.name} author={item.author} genre={item.genre} releseDate={item.releseDate} id={item.id} key={item.id} />
+                    })
+                }
+            </React.Fragment>
+        );
+    }
+};
+
+interface ListProps {
+    item: Object,
+
+
+}
+
+class ListItem extends React.Component<IBookData>{
+    constructor(props: IBookData) {
+        super(props);
+    }
+
+    public render() {
+        return (
+            <>
+                <div className="card">
+                    <div className="card-header">
+                        {this.props.id} | {this.props.name}
+                    </div>
+                    <div className="card-body">
+                        <blockquote className="blockquote mb-0">
+                            <p>Genre: {this.props.genre}</p>
+                            <p>Relese Date:  {this.props.releseDate}</p>
+                            <footer className="blockquote-footer"> <cite title="Source Title"> {this.props.author.lName} {this.props.author.name} {this.props.author.mName}</cite></footer>
+                            <br/>
+                            <a href="#" className="btn btn-primary">Detail</a>
+                        </blockquote>
+                    </div>
+                </div>
+                <br/>
+            </>
+        )
+    }
+}
+export default connect()(Home as any);
