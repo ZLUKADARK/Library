@@ -9,6 +9,8 @@ import ApiBooks from "../store/ApiBooks";
 import IBookData from '../store/ApiBooks';
 import Services from '../Services/BookServices';
 import 'bootstrap/dist/css/bootstrap.css';
+import BookServices from '../Services/BookServices';
+import { METHODS } from 'http';
 
 type Props = {};
 
@@ -26,15 +28,24 @@ class Home extends Component<Props, State> {
     books: Array<IBookData> = [];
 
     componentDidMount() {
-        this.getAllBooks();
-        
+        this.getAllBooks();  
+    }
+
+    removeBook = (iId: any) => {
+        BookServices.delete(iId)
+            .then((response: any) => {
+                console.log(response.data);
+                this.getAllBooks();
+            })
+            .catch((e: Error) => {
+                console.log(e);
+            });
     }
 
     getAllBooks() {
         Services.getAll()
             .then((response: any) => {
                 this.setState(this.books = response.data)
-                console.log(this.books[0].author.lName);
             })
             .catch((e: Error) => {
                 console.log(e);
@@ -47,7 +58,7 @@ class Home extends Component<Props, State> {
             <React.Fragment>
                 {
                     this.books.map((item, i) => {
-                        return <ListItem name={item.name} author={item.author} genre={item.genre} releseDate={item.releseDate} id={item.id} key={item.id} />
+                        return <ListItem name={item.name} author={item.author} genre={item.genre} releseDate={item.releseDate} id={item.id} key={item.id} onDelete={this.removeBook} />
                     })
                 }
             </React.Fragment>
@@ -61,10 +72,14 @@ interface ListProps {
 
 }
 
-class ListItem extends React.Component<IBookData>{
+class ListItem extends React.Component<IBookData, State>{
     constructor(props: IBookData) {
         super(props);
+            
     }
+
+    
+
 
     public render() {
         return (
@@ -78,8 +93,8 @@ class ListItem extends React.Component<IBookData>{
                             <p>Genre: {this.props.genre}</p>
                             <p>Relese Date:  {this.props.releseDate}</p>
                             <footer className="blockquote-footer"> <cite title="Source Title"> {this.props.author.lName} {this.props.author.name} {this.props.author.mName}</cite></footer>
-                            <br/>
-                            <a href="#" className="btn btn-primary">Detail</a>
+                            <br />
+                            <button className="btn btn-primary" onClick={() => this.props.onDelete(this.props.id)}>Delete {this.props.name}</button>
                         </blockquote>
                     </div>
                 </div>
