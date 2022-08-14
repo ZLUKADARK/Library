@@ -20,8 +20,5 @@ class BooksdataSevice {
     deleteAll() {
         return http.delete<any>(`/Books`);
     }
-    findByTitle(title: string) {
-        return http.get<Array<IBooksData>>(`/Books?name=${name}`);
-    }
 }
 export default new BooksdataSevice();
