@@ -13,8 +13,9 @@ export default axios.create({
 
 export default interface IBooksData {
     id?: any | null,
-    name: string,
+    title: string,
     genre: string,
+    authorId: null,
     author: {
         id?: any | null,
         name: string,

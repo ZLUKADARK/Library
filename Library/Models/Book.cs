@@ -9,7 +9,7 @@ namespace Library.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Genre { get; set; }
 
         [DataType(DataType.Date)]
