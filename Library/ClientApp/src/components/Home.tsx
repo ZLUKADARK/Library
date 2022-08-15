@@ -88,7 +88,7 @@ class ListItem extends React.Component<IBookData, State>{
                     <div className="card-body">
                         <blockquote className="blockquote mb-0">
                             <p>Genre: {this.props.genre}</p>
-                            <p>Relese Date:  {this.props.releseDate}</p>
+                            <p className="Date">Relese Date:  {this.props.releseDate}</p>
                             <footer className="blockquote-footer"> <cite title="Source Title"> {this.props.author.lName} {this.props.author.name} {this.props.author.mName}</cite></footer>
                             <br />
                             <button className="btn btn-primary" onClick={() => this.props.onDelete(this.props.id)}>Delete {this.props.title}</button>

@@ -15,7 +15,7 @@ export default interface IBooksData {
     id?: any | null,
     title: string,
     genre: string,
-    authorId: null,
+    authorId: any | null,
     author: {
         id?: any | null,
         name: string,
@@ -23,6 +23,13 @@ export default interface IBooksData {
         mName: string
     },
     releseDate: Date
-}
+};
+
+export default interface IBooksDataCreateUpdate {
+    title: string,
+    genre: string,
+    authorId: any | null,
+    releseDate: Date
+};
 
 
