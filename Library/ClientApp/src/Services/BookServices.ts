@@ -9,10 +9,10 @@ class BooksdataSevice {
     get(id: string) {
         return http.get<IBooksData>(`/Books/${id}`);
     }
-    create(data: IBooksDataCreateUpdate) {
+    create(data: IBooksData) {
         return http.post<IBooksDataCreateUpdate>("/Books", data);
     }
-    update(data: IBooksDataCreateUpdate, id: any) {
+    update(data: IBooksData, id: any) {
         return http.put<any>(`/Books/${id}`, data);
     }
     delete(id: any) {
