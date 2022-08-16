@@ -11,11 +11,12 @@ import { type } from 'os';
 import { isDate } from 'util';
 import { title } from 'process';
 import IBooksDataCreateUpdate from "../store/ApiBooks"
+import IBookData from "../store/ApiBooks"
 import { stat } from 'fs';
 
 type Props = {};
 
-type State = IBooksDataCreateUpdate;
+type State = IBookData;
 
 class NewBook extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -34,6 +35,8 @@ class NewBook extends React.Component<Props, State> {
             authorId: null
         };
     }
+
+
 
     onChangeTitle(e: ChangeEvent<HTMLInputElement>) {
         this.setState({
@@ -57,8 +60,9 @@ class NewBook extends React.Component<Props, State> {
             authorId: new Number(e.target.value)
         });
     }
+
     saveBook() {
-        const data: IBooksDataCreateUpdate = {
+        const data: IBookData = {
             title: this.state.title,
             genre: this.state.genre,
             authorId: this.state.authorId,

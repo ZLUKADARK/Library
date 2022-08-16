@@ -25,11 +25,5 @@ export default interface IBooksData {
     releseDate: Date
 };
 
-export default interface IBooksDataCreateUpdate {
-    title: string,
-    genre: string,
-    authorId: any | null,
-    releseDate: Date
-};
 
 
