@@ -7,7 +7,7 @@ import * as Booksstore from '../store/ApiBooks';
 import { Component, ChangeEvent } from "react";
 import ApiBooks from "../store/ApiBooks";
 import IBookData from '../store/ApiBooks';
-import Services from '../Services/BookServices';
+
 import BookServices from '../Services/BookServices';
 import { METHODS } from 'http';
 import { title } from 'process';
@@ -45,7 +45,7 @@ class Home extends Component<Props, State> {
     }
 
     getAllBooks() {
-        Services.getAll()
+        BookServices.getAll()
             .then((response: any) => {
                 this.setState(this.books = response.data)
             })

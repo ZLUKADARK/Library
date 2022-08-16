@@ -10,9 +10,11 @@ import { METHODS } from 'http';
 import { type } from 'os';
 import { isDate } from 'util';
 import { title } from 'process';
-import IBooksDataCreateUpdate from "../store/ApiBooks"
 import IBookData from "../store/ApiBooks"
+import IAuthosData from "../store/ApiBooks"
 import { stat } from 'fs';
+import AuthorServices from '../Services/AuthorServices';
+
 
 type Props = {};
 
@@ -32,11 +34,29 @@ class NewBook extends React.Component<Props, State> {
             title: "",
             genre: "",
             releseDate: new Date(),
-            authorId: null
+            authorId: null   
         };
     }
 
+    i: Number = 0;
+    authors: Array<IAuthosData> = [];
 
+    componentDidMount() {
+        this.getAuthors();
+    }
+
+
+    getAuthors() {
+        AuthorServices.getAll()
+            .then((response: any) => {
+                this.setState(this.authors = response.data)
+                console.log(this.authors);
+            })
+            .catch((e: Error) => {
+                console.log(e);
+
+            });
+    }
 
     onChangeTitle(e: ChangeEvent<HTMLInputElement>) {
         this.setState({
@@ -51,14 +71,13 @@ class NewBook extends React.Component<Props, State> {
     onChangeReleseDate(e: ChangeEvent<HTMLInputElement>) {
         this.setState({
             releseDate: new Date(e.target.value).toISOString().slice(0, 10)
-        })
-        
-        
+        }) 
     }
     onChangeAuthorId(e: ChangeEvent<HTMLInputElement>) {
         this.setState({
             authorId: new Number(e.target.value)
         });
+        
     }
 
     saveBook() {
@@ -99,17 +118,27 @@ class NewBook extends React.Component<Props, State> {
                 </div>
 
                 <div className="form-outline mb-4">
-                    <input value={authorId} onChange={this.onChangeAuthorId} name="authorId" type="number" className="form-control" />
+                    <select
+                        className="form-control"
+                        name="lang"
+                        value={authorId}
+                        onChange={this.onChangeAuthorId}
+                    >
+                        {
+                            this.authors.map((item, i) => {
+                                return <option value={item.id}> {item.lName} {item.name} {item.mName}</option>
+                            })
+                        }
+                    </select>
                     <label className="form-label" htmlFor="form6Example5">Author Id</label>
                 </div>
 
                 <div className="form-outline mb-4">
                     <input value={releseDate} onChange={this.onChangeReleseDate} name="releseDate" type="date" className="form-control" />
-                    <label className="form-label" htmlFor="form6Example5">Relese date</label>
-                    
+                    <label className="form-label" htmlFor="form6Example5">Relese date</label>       
                 </div>
-                    
-             
+
+
                 <button type="submit" className="btn btn-primary btn-block mb-4" onClick={this.saveBook}>Place order</button>
             </>
         );
