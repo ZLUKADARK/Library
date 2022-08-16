@@ -25,5 +25,12 @@ export default interface IBooksData {
     releseDate: Date
 };
 
+export default interface IAuthorsData {
+     id?: any | null,
+     name: string,
+     lName: string,
+     mName: string
+};
+
 
 

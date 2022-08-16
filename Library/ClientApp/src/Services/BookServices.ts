@@ -1,6 +1,6 @@
 ﻿import http from "../store/ApiBooks";
 import IBooksData from "../store/ApiBooks"
-import IBooksDataCreateUpdate from "../store/ApiBooks"
+
 
 class BooksdataSevice {
     getAll() {
@@ -10,7 +10,7 @@ class BooksdataSevice {
         return http.get<IBooksData>(`/Books/${id}`);
     }
     create(data: IBooksData) {
-        return http.post<IBooksDataCreateUpdate>("/Books", data);
+        return http.post<IBooksData>("/Books", data);
     }
     update(data: IBooksData, id: any) {
         return http.put<any>(`/Books/${id}`, data);
