@@ -18,7 +18,10 @@ import AuthorServices from '../Services/AuthorServices';
 
 type Props = {};
 
-type State = IBookData;
+type State = IBookData & IAuthosData & {
+    checkedAuthor: boolean,
+    showAuthor: boolean
+};;
 
 class NewBook extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -29,15 +32,30 @@ class NewBook extends React.Component<Props, State> {
         this.onChangeReleseDate = this.onChangeReleseDate.bind(this);
         this.onChangeAuthorId = this.onChangeAuthorId.bind(this);
         this.saveBook = this.saveBook.bind(this);
+        this.saveAuthor = this.saveAuthor.bind(this);
+        this.getAuthors = this.getAuthors.bind(this);
+        this.handleChangeAddAuthor = this.handleChangeAddAuthor.bind(this);
+
+        this.onChangeName = this.onChangeName.bind(this);
+        this.onChangeLName = this.onChangeLName.bind(this);
+        this.onChangeMName = this.onChangeMName.bind(this);
 
         this.state = {
             title: "",
             genre: "",
             releseDate: new Date(),
-            authorId: null   
+            authorId: null,
+
+            checkedAuthor: false,
+           
+            name: "",
+            lName: "",
+            mName: ""
+            
+            
         };
     }
-
+    
     i: Number = 0;
     authors: Array<IAuthosData> = [];
 
@@ -45,17 +63,37 @@ class NewBook extends React.Component<Props, State> {
         this.getAuthors();
     }
 
-
     getAuthors() {
         AuthorServices.getAll()
             .then((response: any) => {
                 this.setState(this.authors = response.data)
-                console.log(this.authors);
             })
             .catch((e: Error) => {
                 console.log(e);
 
             });
+    }
+
+    handleChangeAddAuthor(e: ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            checkedAuthor: e.target.checked
+        });
+    }
+
+    onChangeName(e: ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            name: e.target.value
+        });
+    }
+    onChangeLName(e: ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            lName: e.target.value
+        });
+    }
+    onChangeMName(e: ChangeEvent<HTMLInputElement>) {
+        this.setState({
+            mName: e.target.value
+        });
     }
 
     onChangeTitle(e: ChangeEvent<HTMLInputElement>) {
@@ -77,7 +115,31 @@ class NewBook extends React.Component<Props, State> {
         this.setState({
             authorId: new Number(e.target.value)
         });
-        
+    }
+
+    saveAuthor() {
+        const data: IAuthosData = {
+            name: this.state.name,
+            lName: this.state.lName,
+            mName: this.state.mName,
+        };
+        AuthorServices.create(data)
+            .then((response: any) => {
+                this.setState({
+                    id: response.data.id,
+                    name: response.data.name,
+                    lName: response.data.lName,
+                    mName: response.data.mName,
+                    authorId: response.data.id,
+                    checkedAuthor: false,
+                });
+                this.getAuthors();
+
+                alert('Author added')
+            })
+            .catch((e: Error) => {
+                console.log(e);
+            });
     }
 
     saveBook() {
@@ -89,14 +151,7 @@ class NewBook extends React.Component<Props, State> {
         };
         BookServices.create(data)
             .then((response: any) => {
-                this.setState({
-                    id: response.data.id,
-                    title: response.data.title,
-                    genre: response.data.genre,
-                    releseDate: response.data.releseDate,
-                    authorId: response.data.authorId
-                });
-                console.log(response.data);
+                alert('Book added')
             })
             .catch((e: Error) => {
                 console.log(e);
@@ -104,42 +159,105 @@ class NewBook extends React.Component<Props, State> {
     }
 
     public render() {
-        const { title, genre, authorId, releseDate } = this.state;
+        const { title, genre, authorId, releseDate, checkedAuthor, name, lName, mName } = this.state;
+        
         return (
             <>
-                <div className="form-outline mb-4">
-                    <input value={title} onChange={this.onChangeTitle} name="title" type="text" className="form-control" />
-                    <label className="form-label" htmlFor="form6Example3">Book title</label>
+                <br/>
+                <br/>
+                <br />
+                
+                <div className="container">
+                    
+                {(() => {
+                    if (this.state.checkedAuthor === true) {
+                        return (
+                            <>
+                            <div className="row mb-4">
+                                <div className="col">
+                                    <div className="form-outline">
+                                        <input value={name} onChange={this.onChangeName} name="name" type="text" className="form-control" />
+                                        <label className="form-label" htmlFor="form6Example1">Name</label>
+                                    </div>
+                                </div>
+                                <div className="col">
+                                    <div className="form-outline">
+                                        <input value={lName} onChange={this.onChangeLName} name="lName" type="text" className="form-control" />
+                                        <label className="form-label" htmlFor="form6Example2">Last name</label>
+                                    </div>
+                                </div>
+                                <div className="col">
+                                    <div className="form-outline">
+                                        <input value={mName} onChange={this.onChangeMName} name="mName" type="text" className="form-control" />
+                                        <label className="form-label" htmlFor="form6Example2">Middle name</label>
+                                    </div>
+                                </div>
+                                <button type="submit" className="btn btn-primary btn-block mb-2" onClick={this.saveAuthor}>Add new author</button>
+                            </div>
+                            <br/>
+                            </>
+                        )
+                    }
+                })()}
+                    
+                <div className="row mb-4">
+                    <div className="col-2 newbook-menu-title" >
+                        <label className="form-label" htmlFor="form6Example3">Book title</label>
+                    </div>
+                    <div className="col-10 justify-content-end text-center">
+                        <input value={title} onChange={this.onChangeTitle} name="title" type="text" className="form-control" />
+                    </div>
                 </div>
 
-                <div className="form-outline mb-4">
-                    <input  value={genre} onChange={this.onChangeGenre} name="genre" type="text" className="form-control" />
-                    <label className="form-label" htmlFor="form6Example4">Genre</label>
+                <div className="row mb-4">
+                    <div className="col-2 newbook-menu-title" >
+                        <label className="form-label" htmlFor="form6Example4">Genre</label>
+                    </div>
+                    <div className="col-10 justify-content-end text-center">
+                        <input value={genre} onChange={this.onChangeGenre} name="genre" type="text" className="form-control" />
+                    </div>
                 </div>
 
-                <div className="form-outline mb-4">
-                    <select
-                        className="form-control"
-                        name="lang"
-                        value={authorId}
-                        onChange={this.onChangeAuthorId}
-                    >
-                        {
-                            this.authors.map((item, i) => {
-                                return <option value={item.id}> {item.lName} {item.name} {item.mName}</option>
-                            })
-                        }
-                    </select>
-                    <label className="form-label" htmlFor="form6Example5">Author Id</label>
+                <div className="row mb-4 ">
+                    <div className="col-2 newbook-menu-title" >
+                        <label className="form-label " >Author</label>
+                    </div>
+                    <div className="col-10 justify-content-end text-center">
+                            <select
+                                className="form-control"
+                                name="lang"
+                                value={authorId}
+                                onChange={this.onChangeAuthorId}
+                            >
+                                {
+                                this.authors.map((item, i) => {
+                                    return <option key={item.id} value={item.id}> {item.lName} {item.name} {item.mName}</option>
+                                    })
+                                }
+                            </select>
+                    </div>
                 </div>
 
-                <div className="form-outline mb-4">
-                    <input value={releseDate} onChange={this.onChangeReleseDate} name="releseDate" type="date" className="form-control" />
-                    <label className="form-label" htmlFor="form6Example5">Relese date</label>       
+                <div className="row mb-4">
+                    <div className="col-2 newbook-menu-title" >
+                        <label className="form-label" htmlFor="form6Example5">Relese date</label>
+                    </div>
+                    <div className="col-10 justify-content-end text-center">
+                        <input value={releseDate} onChange={this.onChangeReleseDate} name="releseDate" type="date" className="form-control" />
+                    </div>
                 </div>
 
-
-                <button type="submit" className="btn btn-primary btn-block mb-4" onClick={this.saveBook}>Place order</button>
+                <div className="row mb-4">
+                    <div className="col-2 newbook-menu-title" >
+                        <label className="form-label" htmlFor="form6Example5">Add new author</label>
+                    </div>
+                    <div className="col-10 justify-content-start text-left">
+                        <input value={checkedAuthor} onChange={this.handleChangeAddAuthor} name="checkedAuthor" type="checkbox" className="form-control" />
+                    </div>
+                </div>
+                
+                <button type="submit" className="btn btn-primary btn-block mb-2" onClick={this.saveBook}>Save book</button>
+                </div>
             </>
         );
     }
