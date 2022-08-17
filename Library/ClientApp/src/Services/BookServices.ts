@@ -6,7 +6,7 @@ class BooksdataSevice {
     getAll() {
         return http.get<Array<IBooksData>>("/Books");
     }
-    get(id: string) {
+    get(id: any) {
         return http.get<IBooksData>(`/Books/${id}`);
     }
     create(data: IBooksData) {

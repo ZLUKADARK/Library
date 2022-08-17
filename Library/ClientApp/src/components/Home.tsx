@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { error } from 'console';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, Router } from 'react-router';
 import { ApplicationState } from '../store';
 import * as Booksstore from '../store/ApiBooks';
 import { Component, ChangeEvent } from "react";
 import ApiBooks from "../store/ApiBooks";
 import IBookData from '../store/ApiBooks';
-
 import BookServices from '../Services/BookServices';
 import { METHODS } from 'http';
 import { title } from 'process';
+import EditBook from './EditBook';
+import { Link } from 'react-router-dom';
 
 type Props = {};
 
@@ -88,10 +89,11 @@ class ListItem extends React.Component<IBookData, State>{
                     <div className="card-body">
                         <blockquote className="blockquote mb-0">
                             <p>Genre: {this.props.genre}</p>
-                            <p className="Date">Relese Date:  {this.props.releseDate}</p>
+                            <p className="Date">Relese Date:  {new Date(this.props.releseDate).toISOString().slice(0, 10)}</p>
                             <footer className="blockquote-footer"> <cite title="Source Title"> {this.props.author.lName} {this.props.author.name} {this.props.author.mName}</cite></footer>
                             <br />
-                            <button className="btn btn-primary" onClick={() => this.props.onDelete(this.props.id)}>Delete {this.props.title}</button>
+                            <button className="btn btn-error" onClick={() => this.props.onDelete(this.props.id)}>Delete {this.props.title}</button>
+                            <Link to={"/EditBook/" + this.props.id} ><button className="btn btn-primary">  Edit </button></Link>
                         </blockquote>
                     </div>
                 </div>
