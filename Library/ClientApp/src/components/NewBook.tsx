@@ -131,7 +131,6 @@ class NewBook extends React.Component<Props, State> {
                     lName: response.data.lName,
                     mName: response.data.mName,
                     authorId: response.data.id,
-                    checkedAuthor: false,
                 });
                 this.getAuthors();
 
