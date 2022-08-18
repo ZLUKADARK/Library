@@ -143,7 +143,6 @@ class EditBook extends React.Component<IBookData, State> {
         AuthorServices.create(data)
             .then((response: any) => {
                 this.setState({
-                    id: response.data.id,
                     name: response.data.name,
                     lName: response.data.lName,
                     mName: response.data.mName,
