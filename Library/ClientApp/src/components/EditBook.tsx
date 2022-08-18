@@ -61,7 +61,6 @@ class EditBook extends React.Component<IBookData, State> {
     authors: Array<IAuthosData> = [];
 
     componentDidMount() {
-        console.log(this.state.id);
         this.getBook();
         this.getAuthors();
     }
@@ -85,7 +84,6 @@ class EditBook extends React.Component<IBookData, State> {
         AuthorServices.getAll()
             .then((response: any) => {
                 this.setState(this.authors = response.data)
-                console.log(this.authors);
             })
             .catch((e: Error) => {
                 console.log(e);
@@ -150,7 +148,6 @@ class EditBook extends React.Component<IBookData, State> {
                     lName: response.data.lName,
                     mName: response.data.mName,
                     authorId: response.data.id,
-                    checkedAuthor: false,
                 });
                 this.getAuthors();
 
@@ -170,7 +167,7 @@ class EditBook extends React.Component<IBookData, State> {
         };
         BookServices.update(data, this.state.id)
             .then((response: any) => {
-                console.log(response);
+                alert('Updated');
             })
             .catch((e: Error) => {
                 console.log(e);
